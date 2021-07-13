@@ -1,0 +1,56 @@
+[user]
+    name = brady.ouren
+    email = tippenein@gmail.com
+
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+    ui = auto
+
+[push]
+    default = current
+
+[pull]
+    default = current
+
+[core]
+    editor = vim
+    pager = less -R
+
+[alias]
+    diverges = !bash -c 'diff -u <(git rev-list --first-parent "${1}") <(git rev-list --first-parent "${2:-HEAD}") | sed -ne \"s/^ //p\" | head -1' -
+    s = status
+    a = add -p
+    c = commit
+    cm = commit -m
+    b = branch
+    bd = branch -D
+    bv = branch -v
+    co = checkout
+    cob = checkout -b
+    cot = checkout --track
+    ca = commit --amend
+    can = commit --amend --no-edit
+    d = diff
+    dh = diff HEAD~1
+    dm = diff master
+    dd = diff develop
+    pm = pull origin master
+    ss = stash save
+    sp = stash pop
+    mnof = merge --no-ff
+    lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+    up = !sh -c 'git pull --rebase --prune && git log --pretty=format:\"%Cred%ae %Creset- %C(yellow)%s %Creset(%ar)\" HEAD@{1}..'
+    lol = log --graph --decorate --pretty=oneline --abbrev-commit
+    lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    ls = ls-files
+    col = "!git checkout $(git branch | cut -c 3- | pick)"
+    sls = "!git stash list | cat"
+    sdrop = "!f() { git stash drop stash@{/$*}; }; f"
+    sapply = "!f() { git stash apply stash@{/$*}; }; f"
+    spop = "!f() { git stash pop stash@{/$*}; }; f"
+    sshow = "!f() { git stash show stash@{/$*} -p; }; f"
+
+[rerere]
+    enabled = true

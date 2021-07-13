@@ -1,0 +1,122 @@
+function getJson() {
+  curl --header "Accept:application/json" $1
+}
+function md() {
+	mkdir -p "$@" && cd "$@"
+}
+convert2mp3() {
+  ffmpeg -i $1 -codec:a libmp3lame -qscale:a 0 "$1.mp3"
+}
+new-haskell() {
+  hi $1 --repository git://github.com/tippenein/haskeleton.git
+}
+
+new-servant() {
+  hi $1 --repository git://github.com/tippenein/haskeleton-servant.git
+}
+
+whatis() {
+  grep $1 ~/.aliases
+}
+
+docker-rmi-pattern() {
+  docker images | grep '$1' | awk '{print $3}' | xargs docker rmi
+}
+dockerbash() {
+  docker exec -it $1 bash
+}
+
+gunpair() {
+  git config --local --unset-all user.name
+  git config --local --unset-all user.email
+  git config --local --unset-all user.initials
+}
+
+gclone() {
+  git clone git@github.com:"$*"
+}
+
+new-branch() { git checkout -b $1 && git push --set-upstream origin $1; }
+
+# https://github.com/rpellerin/dotfiles/blob/master/.aliases
+# Extract any archive
+function extract() {
+    if [ -f $1 ] ; then
+        case $1 in
+            *.tar.bz2) tar xjf $1 ;;
+            *.tar.gz) tar xzf $1 ;;
+            *.bz2) bunzip2 $1 ;;
+            *.rar) rar x $1 ;;
+            *.gz) gunzip $1 ;;
+            *.tar) tar xf $1 ;;
+            *.tbz2) tar xjf $1 ;;
+            *.tgz) tar xzf $1 ;;
+            *.zip) unzip $1 ;;
+            *.Z) uncompress $1 ;;
+            *) echo "'$1' cannot be extracted via extract()" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+
+# Open a file with the appropriate application
+function open {
+    while [ "$1" ] ; do
+        xdg-open $1 &> /dev/null
+        shift
+    done
+}
+
+function move_dat_torrent {
+    scp ~/Downloads/*.torrent tippenein@deltadrome.us:~/watch && rm ~/Downloads/*.torrent
+}
+
+function get_dat_torrent {
+    scp tippenein@deltadrome.us:~/downloaded/* ~/Documents/
+}
+
+function copy_samples {
+    scp ~/Downloads/*.mp3 tippenein@deltadrome.us:~/temps && rm ~/Downloads/*.mp3
+    scp ~/Downloads/*.wav tippenein@deltadrome.us:~/temps && rm ~/Downloads/*.wav
+}
+
+function gitignore() {
+  if [ -z "$1" ]; then
+    echo ""
+    echo "Usage: gitignore <option>"
+    echo "Options are the various gitignore files found at https://github.com/github/gitignore/"
+    echo "Do not include the .gitignore file extension on the end of the option."
+    echo "Examples include:"
+    echo "   gitignore Rails"
+    echo "   gitignore Objective-C"
+    echo "   gitignore Global/OSX"
+    echo ""
+  else
+    echo "Fetching .gitignore for $1"
+    curl -o .gitignore https://raw.githubusercontent.com/github/gitignore/master/$1.gitignore
+  fi
+  return 0
+}
+
+function timestamp() {
+  date "+%Y%m%d%H%M%S"
+}
+
+# e.g. printLine 2000,2250 file
+printLine () {
+    sed -n -e "$1p" "$2"
+}
+function ec2-ssh () {
+  ssh $(aws ec2 describe-instances --filter Name=instance-id,Values=$1 | jq '.Reservations[0].Instances[0].PrivateIpAddress' | tr -d '"')
+}
+
+function gprune () {
+  git fetch -p &&
+  for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done
+}
+
+function lumistage () {
+  ssh ubuntu@powerpuff.$1.staging.lumi.dev
+}

@@ -1,0 +1,41 @@
+#!/bin/bash
+# 
+# Installation script which setup up an Ubuntu Xenial machine to use this
+# xmonad configuration. 
+#
+# WARNING!!! 
+# * This has only been tested on a limited number of machines running 
+#   Ubuntu 18.04 64-bit.
+# * This is not a sophisticated installation script by any stretch 
+#   of the imagination. 
+# * I take no responsibility if this overwrites any configuration settings 
+#   or otherwise messes up your system. 
+#
+# Please review the readme file to find out exactly what it does and does not 
+# do. Or, visit the repository for more information: 
+# https://github.com/davidbrewer/xmonad-ubuntu-conf
+# 
+# Author: David Brewer
+
+echo "Installing required packages..."
+sudo apt-get install xmonad libghc-xmonad-dev libghc-xmonad-contrib-dev xmobar xcompmgr nitrogen stalonetray moreutils synapse ssh-askpass-gnome
+
+echo "Creating xmonad xsession configuration..."
+if [ -f "/usr/share/xsessions/xmonad.desktop" ] ; then
+  sudo mv -n /usr/share/xsessions/xmonad.desktop /usr/share/xsessions/xmonad.desktop.original
+fi
+sudo cp ~/.xmonad/xmonad.desktop /usr/share/xsessions
+sudo chmod a+r /usr/share/xsessions/xmonad.desktop
+
+# Copy our custom Xmonad greeter badge into place, but only if we're using Unity Greeter
+if [ -d "/usr/share/unity-greeter" ] ; then
+  sudo cp ~/.xmonad/images/custom_xmonad_badge.png /usr/share/unity-greeter
+  sudo chmod a+r /usr/share/unity-greeter/custom_xmonad_badge.png
+fi
+
+echo "Linking to customized gnome 2 configuration..."
+if [ -f "~/.gtkrc-2.0" ] ; then
+  mv -n ~/.gtkrc-2.0 ~/gtkrc-2.0.original
+fi
+ln -s .xmonad/.gtkrc-2.0 ~/.gtkrc-2.0
+
