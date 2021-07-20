@@ -64,7 +64,7 @@ myManageHook = (composeAll . concat $
       -- classnames - Use 'xprop' to click windows and find out classname
       myShell   = ["gnome-terminal", "urxvt", "rxvt-unicode"]
       myDev     = ["emacs", "Emacs"]
-      myWeb     = ["Firefox", "firefox-trunk"]
+      myWeb     = ["Firefox", "firefox-trunk", "brave-browser"]
       myBiz     = ["Chromium-browser","chromium-browser", "google-chrome", "Google-chrome"]
       myChat    = ["Pidgin","Buddy List", "hipchat", "HipChat", "Slack"]
       myOther   = ["Evince","xchm","libreoffice-writer","libreoffice-startcenter", "Signal", "Thunderbird"]
@@ -110,11 +110,12 @@ myStartupHook = do
   spawnOnce "pasystray"
   spawnOnce myTerminal
   spawnOnce "firefox"
+  spawnOnce "brave-browser"
+  spawnOnce "google-chrome"
   spawnOnce "emacs"
   -- spawnOnce "slack"
   spawnOnce "discord"
   spawnOnce "thunderbird"
-  spawnOnce "google-chrome"
   if h == Desktop then desktopHooks else laptopHooks
   where
     desktopHooks = do
