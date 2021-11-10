@@ -37,12 +37,14 @@
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type nil)
+(setq display-line-numbers-type t)
+
 
 (map! :leader
       "d" #'dired)
 
-;; (setq helm-grep-ag-command "rg --vimgrep --no-heading --smart-case")
+(map! :leader
+      "v e" #'evil-multiedit-match-all)
 
 ;; Rust
 (map! :leader

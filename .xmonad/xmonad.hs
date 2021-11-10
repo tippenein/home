@@ -64,7 +64,7 @@ myManageHook = (composeAll . concat $
       -- classnames - Use 'xprop' to click windows and find out classname
       myShell   = ["gnome-terminal", "urxvt", "rxvt-unicode"]
       myDev     = ["emacs", "Emacs"]
-      myWeb     = ["Firefox", "firefox-trunk", "brave-browser"]
+      myWeb     = ["Firefox", "firefox-trunk", "brave-browser", "Brave-browser"]
       myBiz     = ["Chromium-browser","chromium-browser", "google-chrome", "Google-chrome"]
       myChat    = ["Pidgin","Buddy List", "hipchat", "HipChat", "Slack"]
       myOther   = ["Evince","xchm","libreoffice-writer","libreoffice-startcenter", "Signal", "Thunderbird"]
@@ -109,9 +109,9 @@ myStartupHook = do
   -- spawnOnce "redshift-gtk"
   spawnOnce "pasystray"
   spawnOnce myTerminal
-  spawnOnce "firefox"
+  -- spawnOnce "firefox"
   spawnOnce "brave-browser"
-  spawnOnce "google-chrome"
+  spawnOnce "google-chrome --profile-directory=Default"
   spawnOnce "emacs"
   -- spawnOnce "slack"
   spawnOnce "discord"
