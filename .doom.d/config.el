@@ -46,6 +46,9 @@
 (map! :leader
       "v e" #'evil-multiedit-match-all)
 
+(map! :leader
+      "e l" #'flycheck-list-errors)
+
 ;; Rust
 (map! :leader
       "r c" #'rustic-compile)
@@ -62,7 +65,36 @@
 (map! :leader
       "z z" #'call-last-kbd-macro)
 
-;; (setq haskell-stylish-on-save t)
+;; git
+(map! :leader
+      "g p" #'magit-push)
+
+(defun kill-other-buffers ()
+    "Kill all other buffers."
+    (interactive)
+    (mapc 'kill-buffer
+          (delq (current-buffer)
+                (remove-if-not 'buffer-file-name (buffer-list)))))
+(map! :leader
+      "p K" #'doom/kill-other-buffers)
+
+;; fuck go
+;; go mode
+;; (defun my-go-mode-hook ()
+;;   ; Call Gofmt before saving
+;;   (add-hook 'before-save-hook 'gofmt-before-save)
+;;   ; Customize compile command to run go build
+;;   (if (not (string-match "go" compile-command))
+;;       (set (make-local-variable 'compile-command)
+;;            "go build -v && go test -v"))
+;;   ; Godef jump key binding
+;; )
+;; (add-hook 'go-mode-hook 'my-go-mode-hook)
+
+(setq haskell-stylish-on-save t)
+;;
+(map! :leader
+      "A" #'projectile-ripgrep)
 
 ;; SURROUND
 (after! evil-surround

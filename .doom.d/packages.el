@@ -50,3 +50,4 @@
 ;(unpin! t)
 (package! haskell-mode)
 (package! lsp-haskell)
+(package! ripgrep)
