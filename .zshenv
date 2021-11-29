@@ -10,6 +10,7 @@ plugins=(git)
 
 export GOROOT=/usr/local/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+export PATH=$HOME/go/bin:$PATH
 
 source ~/.exports
 source ~/.functions
@@ -18,8 +19,8 @@ source ~/.private
 source ~/bin/z/z.sh
 export _Z_CMD=j
 
-
 setxkbmap -option "caps:swapescape"
+
 source "$HOME/.cargo/env"
 
 . "$HOME/.cargo/env"
