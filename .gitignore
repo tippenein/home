@@ -626,3 +626,4 @@ snap/
 .flutter*
 .pub-cache
 punch.db
+.emacs.d/
