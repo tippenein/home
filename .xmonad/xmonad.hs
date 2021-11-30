@@ -3,6 +3,7 @@
 import           XMonad
 
 import Control.Monad (when)
+import Data.Maybe
 import Data.List (intercalate)
 import System.IO
 import System.Posix.Unistd
@@ -14,7 +15,7 @@ import XMonad.Prompt.Input
 import XMonad.Prompt (XPConfig(..))
 import XMonad.Actions.Search
 import XMonad.Config.Gnome
-import XMonad.Util.EZConfig       (additionalKeys, additionalKeysP)
+import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.DynamicLog
@@ -223,6 +224,8 @@ main = do
     , ((0, 0x1008ff02        ), spawn "xbacklight -inc +10%")
     ] `additionalKeysP`
     [ ("M-/", submap . mySearchMap $ myPromptSearch)
+    , ("M-g h", visitGithub "tippenein/home")
+    , ("M-g i", visit lumiIssues Nothing)
     ]
 
   where
@@ -230,6 +233,14 @@ main = do
     modMask = myModMask
     modShift x = (modMask .|. shiftMask, x)
     modCtrl x = (modMask .|. controlMask, x)
+
+visitGithub r = visit "https://github.com/" (Just r)
+
+visit :: String -> Maybe String -> X ()
+visit url route = safeSpawn mainBrowser [intercalate "/" $ catMaybes [Just url, route]] >> viewWeb
+
+-- could make this a prompt for specific issue numbers as well
+lumiIssues = "https://gitlab.com/lumi-tech/lumi/-/issues?scope=all&state=opened&assignee_username[]=tippenein"
 
 mySearchMap :: (SearchEngine -> a) -> M.Map (KeyMask, KeySym) a
 mySearchMap method = M.fromList $
@@ -243,7 +254,9 @@ myXPConfig = def
 
 
 myPromptSearch (SearchEngine _ site) = inputPrompt myXPConfig "Search" ?+ \s ->
-  search "brave-browser" site s >> viewWeb
+  search mainBrowser site s >> viewWeb
+
+mainBrowser = "brave-browser"
 
 getXmobarLocation h = case h of
   Desktop ->
