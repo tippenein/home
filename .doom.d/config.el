@@ -78,6 +78,9 @@
 (map! :leader
       "p K" #'doom/kill-other-buffers)
 
+;; allow ripgrep usage
+(put 'projectile-ripgrep 'disabled nil)
+
 ;; fuck go
 ;; go mode
 ;; (defun my-go-mode-hook ()

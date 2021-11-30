@@ -627,3 +627,5 @@ snap/
 .pub-cache
 punch.db
 .emacs.d/
+bin/flyway*
+.doom.d/custom.el
