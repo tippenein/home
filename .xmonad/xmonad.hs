@@ -2,13 +2,19 @@
 
 import           XMonad
 
+import Control.Monad (when)
 import Data.List (intercalate)
 import System.IO
 import System.Posix.Unistd
+import qualified Data.Map as M
 
 import XMonad.Actions.CycleWS
+import XMonad.Actions.Submap (submap)
+import XMonad.Prompt.Input
+import XMonad.Prompt (XPConfig(..))
+import XMonad.Actions.Search
 import XMonad.Config.Gnome
-import XMonad.Util.EZConfig       (additionalKeys)
+import XMonad.Util.EZConfig       (additionalKeys, additionalKeysP)
 import XMonad.Util.Run
 import XMonad.Util.SpawnOnce
 import XMonad.Hooks.DynamicLog
@@ -19,7 +25,8 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Layout.NoBorders    (noBorders, smartBorders)
 import XMonad.Layout.PerWorkspace (onWorkspace, onWorkspaces)
 import XMonad.Layout.SimpleFloat
-import XMonad.StackSet            (focusDown)
+import XMonad.StackSet            (focusDown, view)
+import qualified XMonad.Util.ExtensibleState           as XS
 -------------------
 -- Layouts --------
 -------------------
@@ -43,17 +50,17 @@ myWorkspaces = [ "1:shell"
 myManageHook :: ManageHook
 myManageHook = (composeAll . concat $
     [ pure $ manageHook gnomeConfig
-    , [ resource     =? r   --> doIgnore            |   r   <- myIgnores]
-    , [ className    =? c   --> doShift  "1:shell"  |   c   <- myShell  ]
-    , [ className    =? c   --> doShift  "2:emacs"  |   c   <- myDev    ]
-    , [ className    =? c   --> doShift  "3:web"    |   c   <- myWeb    ]
-    , [ className    =? c   --> doShift  "4:biz"    |   c   <- myBiz    ]
-    , [ className    =? c   --> doShift  "5:chat"   |   c   <- myChat   ]
-    , [ className    =? c   --> doShift  "6:other"  |   c   <- myOther  ]
-    , [ className    =? c   --> doShift  "7"        |   c   <- myGames  ]
-    , [ className    =? c   --> doCenterFloat       |   c   <- myFloats ]
-    , [ name         =? n   --> doCenterFloat       |   n   <- myNames  ]
-    , [ isFullscreen        --> myDoFullFloat                           ]
+    , [ resource     =? r --> doIgnore            | r <- myIgnores]
+    , [ className    =? c --> doShift  "1:shell"  | c <- myShell  ]
+    , [ className    =? c --> doShift  "2:emacs"  | c <- myDev    ]
+    , [ className    =? c --> doShift  "3:web"    | c <- myWeb    ]
+    , [ className    =? c --> doShift  "4:biz"    | c <- myBiz    ]
+    , [ className    =? c --> doShift  "5:chat"   | c <- myChat   ]
+    , [ className    =? c --> doShift  "6:other"  | c <- myOther  ]
+    , [ className    =? c --> doShift  "7"        | c <- myGames  ]
+    , [ className    =? c --> doCenterFloat       | c <- myFloats ]
+    , [ name         =? n --> doCenterFloat       | n <- myNames  ]
+    , [ isFullscreen      --> myDoFullFloat                           ]
     , pure manageDocks
     ])
 
@@ -92,6 +99,30 @@ myManageHook = (composeAll . concat $
       -- a trick for fullscreen but stil allow focusing of other WSs
       myDoFullFloat :: ManageHook
       myDoFullFloat = doF focusDown <+> doFullFloat
+      -- Lockdown mode (for Getting Work Done)
+
+data LockdownState = LockdownState Bool
+  deriving (Typeable, Read, Show)
+
+instance ExtensionClass LockdownState where
+  initialValue  = LockdownState False
+  extensionType = PersistentExtension
+
+setLockdown :: X ()
+setLockdown = XS.put (LockdownState True)
+
+releaseLockdown :: X ()
+releaseLockdown = XS.put (LockdownState False)
+
+toggleLockdown :: X ()
+toggleLockdown = XS.modify (\(LockdownState l) -> LockdownState (not l))
+
+withLockdown act = do
+  LockdownState l <- XS.get
+  when (not l) act
+
+viewWeb :: X ()
+viewWeb = withLockdown $ windows (view "web")
 
 newManageHook = myManageHook <+> manageHook def
 
@@ -123,6 +154,7 @@ myStartupHook = do
   where
     desktopHooks = do
       spawnOnce "monitors"
+      spawnOnce "nordvpn connect"
 
     laptopHooks = do
       spawnOnce "xscreensaver -nosplash"
@@ -134,6 +166,8 @@ data Host
   | Laptop
   deriving (Eq, Read, Show)
 
+-- hostname as identifier
+-- https://github.com/byorgey/dotfiles/blob/master/xmonad.hs#L106
 getHost :: IO Host
 getHost = do
   hostName <- fmap nodeName getSystemID
@@ -143,14 +177,8 @@ getHost = do
     _               -> Desktop
 
 main = do
-  -- look into using hostname as identifier
-  -- https://github.com/byorgey/dotfiles/blob/master/xmonad.hs#L106
   h <- getHost
-  xmproc <- case h of
-    Desktop ->
-      spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobarDesktop.hs"
-    Laptop ->
-      spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobarLaptop.hs"
+  xmproc <- spawnPipe $ "/usr/bin/xmobar " <> getXmobarLocation h
   xmonad $ gnomeConfig
     { borderWidth        = 2
     , manageHook         = newManageHook
@@ -180,6 +208,7 @@ main = do
     , ((modMask, xK_p)        , spawn "dmenu_run")
     -- select screenshot
     , (modCtrl xK_Print       , spawn mySelectScreenShot)
+    -- searches
     , (modCtrl xK_g           , spawn myScreenGif)
     , (modShift xK_n          , spawn "nm-connection-editor")
     , (modCtrl  xK_Right      , nextWS)
@@ -192,12 +221,35 @@ main = do
     , ((0, 0x1008ff13        ), spawn "amixer -q sset Master 2%+ unmute")
     , ((0, 0x1008ff03        ), spawn "xbacklight -inc -10%")
     , ((0, 0x1008ff02        ), spawn "xbacklight -inc +10%")
+    ] `additionalKeysP`
+    [ ("M-/", submap . mySearchMap $ myPromptSearch)
     ]
+
   where
     smash x = (mod1Mask .|. mod4Mask .|. controlMask, x)
     modMask = myModMask
     modShift x = (modMask .|. shiftMask, x)
     modCtrl x = (modMask .|. controlMask, x)
+
+mySearchMap :: (SearchEngine -> a) -> M.Map (KeyMask, KeySym) a
+mySearchMap method = M.fromList $
+  [ ((0, xK_g), method google)
+  , ((0, xK_w), method wikipedia)                         --  "
+  , ((0, xK_h), method hoogle)
+  ]
+
+myXPConfig :: XPConfig
+myXPConfig = def
+
+
+myPromptSearch (SearchEngine _ site) = inputPrompt myXPConfig "Search" ?+ \s ->
+  search "brave-browser" site s >> viewWeb
+
+getXmobarLocation h = case h of
+  Desktop ->
+    "~/.xmonad/xmobarDesktop.hs"
+  Laptop ->
+    "~/.xmonad/xmobarLaptop.hs"
 
 ----------------
 -- constants ---

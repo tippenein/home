@@ -633,3 +633,5 @@ system.reg
 *.reg
 thinkorswim
 .thinkorswim
+.gitlab_token*
+.xmonad/prompt-history
