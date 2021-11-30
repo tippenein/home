@@ -67,7 +67,7 @@ myManageHook = (composeAll . concat $
       myWeb     = ["Firefox", "firefox-trunk", "brave-browser", "Brave-browser"]
       myBiz     = ["Chromium-browser","chromium-browser", "google-chrome", "Google-chrome"]
       myChat    = ["Pidgin","Buddy List", "hipchat", "HipChat", "Slack"]
-      myOther   = ["Evince","xchm","libreoffice-writer","libreoffice-startcenter", "Signal", "Thunderbird"]
+      myOther   = ["Evince","xchm","libreoffice-writer","libreoffice-startcenter", "Signal", "Thunderbird", "Spotify"]
       myGames   = ["Slay the Spire"]
       myFloats  = [ "Discord"
                   , "Slack Call Minipanel"
@@ -105,23 +105,27 @@ myStartupHook = do
   spawnOnce "unity-settings-daemon"
   spawnOnce "gnome-settings-daemon"
   spawnOnce "nm-applet"
-  spawnOnce "xscreensaver -nosplash"
   -- spawnOnce "redshift-gtk"
   spawnOnce "pasystray"
   spawnOnce myTerminal
   -- spawnOnce "firefox"
   spawnOnce "brave-browser"
-  spawnOnce "google-chrome --profile-directory=Default"
+  -- spawnOnce "google-chrome --profile-directory=Default"
   spawnOnce "emacs"
   -- spawnOnce "slack"
-  spawnOnce "discord"
-  spawnOnce "thunderbird"
+  -- spawnOnce "discord"
+  -- spawnOnce "thunderbird"
+  -- spawnOnce "slack"
+  -- spawnOnce "discord"
+  -- spawnOnce "thunderbird"
+  -- spawnOnce "spotify"
   if h == Desktop then desktopHooks else laptopHooks
   where
     desktopHooks = do
       spawnOnce "monitors"
 
     laptopHooks = do
+      spawnOnce "xscreensaver -nosplash"
       spawnOnce "fdpowermon"
       spawnOnce "blueman-applet"
 
@@ -141,7 +145,12 @@ getHost = do
 main = do
   -- look into using hostname as identifier
   -- https://github.com/byorgey/dotfiles/blob/master/xmonad.hs#L106
-  xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobar.hs"
+  h <- getHost
+  xmproc <- case h of
+    Desktop ->
+      spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobarDesktop.hs"
+    Laptop ->
+      spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobarLaptop.hs"
   xmonad $ gnomeConfig
     { borderWidth        = 2
     , manageHook         = newManageHook

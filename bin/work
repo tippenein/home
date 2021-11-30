@@ -1,0 +1,8 @@
+#!/bin/sh
+
+tmux new-session -d 'work'
+tmux new-window 'fj'
+tmux new-window 'pp'
+tmux new-window 'mojo'
+tmux new-window 'bravo'
+tmux -2 attach-session -d

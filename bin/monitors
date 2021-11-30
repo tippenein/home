@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xrandr --auto --output HDMI-0 --primary --auto --right-of DVI-D-0 && xrandr --output DVI-D-0 --rotate left

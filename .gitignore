@@ -629,3 +629,7 @@ punch.db
 .emacs.d/
 bin/flyway*
 .doom.d/custom.el
+system.reg
+*.reg
+thinkorswim
+.thinkorswim

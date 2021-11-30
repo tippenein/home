@@ -1,0 +1,5 @@
+new -s work
+neww -n fj -c ~/workspace/lumi/lumi/flapjack
+neww -n bravo -c ~/workspace/lumi/lumi/bravo
+neww -n pp -c ~/workspace/lumi/lumi/powerpuff
+neww -n mojo -c ~/workspace/lumi/lumi/mojo 'make build run_server'

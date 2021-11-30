@@ -1,3 +1,14 @@
+# export PYENV_ROOT="$HOME/.pyenv"
+# export JAVA_HOME="/usr/bin/"
+# export PATH="$PYENV_ROOT/bin:$PATH"
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$HOME/workspace/ripgrep/target/release:$PATH"
+# eval "$(rbenv init -)"
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 export ZSH=$HOME/.oh-my-zsh
 
