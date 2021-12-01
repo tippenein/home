@@ -203,7 +203,7 @@ main = do
 ----------------
     `additionalKeys`
     -- screensaver
-    [ (modShift xK_z          , spawn myScreensaver)
+    [ (modShift xK_z          , spawn $ myScreensaver h)
     -- normal screenshot
     , ((0, xK_Print         ) , spawn myFullScreenShot)
     , ((modMask, xK_p)        , spawn "dmenu_run")
@@ -225,7 +225,7 @@ main = do
     ] `additionalKeysP`
     [ ("M-/", submap . mySearchMap $ myPromptSearch)
     , ("M-g h", visitGithub "tippenein/home")
-    , ("M-g i", visit lumiIssues Nothing)
+    , ("M-g l", visit lumiIssues Nothing)
     ]
 
   where
@@ -247,7 +247,10 @@ mySearchMap method = M.fromList $
   [ ((0, xK_g), method google)
   , ((0, xK_w), method wikipedia)                         --  "
   , ((0, xK_h), method hoogle)
+  , ((0, xK_i), method issuesSearch)
   ]
+
+issuesSearch = searchEngineF "lumi-issues" $ \q -> "https://gitlab.com/lumi-tech/lumi/-/issues/" <> q
 
 myXPConfig :: XPConfig
 myXPConfig = def
@@ -271,7 +274,8 @@ myModMask = mod4Mask -- mod1Maks = alt   |   mod4Mask == meta
 myTerminal = "gnome-terminal"
 myFocusedBorderColor = "#88bb77"
 myNormalBorderColor  = "#003300"
-myScreensaver = "xscreensaver-command -lock"
+myScreensaver Laptop = "xscreensaver-command -lock"
+myScreensaver Desktop = "gnome-screensaver-command -lock"
 mySelectScreenShot = "sleep 0.2; scrot -s -e 'mv $f ~/screenies'"
 myFullScreenShot = "scrot -e 'mv $f ~/screenies'"
 

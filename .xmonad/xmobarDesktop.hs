@@ -1,24 +1,14 @@
 Config { font = "xft:Bitstream Vera Sans Mono:size=12:antialias=true"
-       , bgColor = "#222222"
+       , bgColor = "#242424"
        , fgColor = "grey"
-       , position = TopW L 92
+       , position = TopW L 94
        , commands = [ Run Cpu ["-t", "<total>%", "-L","5","-H","40","--normal","green","--high","red"] 15
                     , Run Memory ["-t", "<usedratio>%"] 30
-                    , Run Battery [
-                      "-t", "<acstatus>: <left>% - <timeleft>",
-                      "--",
-                      --"-c", "charge_full",
-                      "-O", "AC",
-                      "-o", "Bat",
-                      "-h", "green",
-                      "-l", "red"
-                      ] 10
                     , Run Date "%a %b %_d - %l:%M" "date" 30
                     , Run StdinReader
-                    , Run Com "/bin/bash" ["-c", "~/.xmonad/get-volume"] "myvolume" 1
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%StdinReader% }{ %date% | Vol: <fc=#00CDCD>%myvolume%</fc> | CPU: %cpu% | MEM: %memory%"
+       , template = "%StdinReader% }{ %date% | CPU: %cpu% | MEM: %memory%"
        , lowerOnStart = False
 }

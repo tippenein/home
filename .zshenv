@@ -39,3 +39,5 @@ source "$HOME/.cargo/env"
 if [ -e /home/brady/.nix-profile/etc/profile.d/nix.sh ]; then . /home/brady/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 export PATH="$PATH:$HOME/snap/flutter/common/flutter/bin"
+
+source "$HOME/.ghcup/env"
