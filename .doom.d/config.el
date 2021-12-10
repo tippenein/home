@@ -56,6 +56,7 @@
       "r v" #'rustic-cargo-run)
 
 ;; macros
+;; These are probably useless just gotta remember how the 'q' and '@' work for macros in evil
 (map! :leader
       "z s" #'kmacro-start-macro)
 (map! :leader
@@ -68,6 +69,8 @@
 ;; git
 (map! :leader
       "g p" #'magit-push)
+(map! :leader
+      "g u" #'magit-pull)
 
 (defun kill-other-buffers ()
     "Kill all other buffers."
