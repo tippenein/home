@@ -39,7 +39,7 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
-
+;; emacs
 (map! :leader
       "d" #'dired)
 
@@ -48,6 +48,12 @@
 
 (map! :leader
       "e l" #'flycheck-list-errors)
+
+(map! :leader
+      "m r" #'+make/run)
+
+(map! :leader
+      "m a" #'+make/run-last)
 
 ;; Rust
 (map! :leader
