@@ -1,7 +1,7 @@
 Config { font = "xft:Bitstream Vera Sans Mono:size=12:antialias=true"
-       , bgColor = "#222222"
+       , bgColor = "#242422"
        , fgColor = "grey"
-       , position = TopW L 94
+       , position = TopW L 86
        , commands = [ Run Cpu ["-t", "<total>%", "-L","5","-H","40","--normal","green","--high","red"] 15
                     , Run Memory ["-t", "<usedratio>%"] 30
                     , Run Date "%a %b %_d - %l:%M" "date" 30

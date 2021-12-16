@@ -236,11 +236,14 @@ main = do
 
 visitGithub r = visit "https://github.com/" (Just r)
 
+-- visit "somewhere.com" (Just "route")
+-- >>> somewhere.com/route
 visit :: String -> Maybe String -> X ()
 visit url route = safeSpawn mainBrowser [intercalate "/" $ catMaybes [Just url, route]] >> viewWeb
 
--- could make this a prompt for specific issue numbers as well
 lumiIssues = "https://gitlab.com/lumi-tech/lumi/-/issues?scope=all&state=opened&assignee_username[]=tippenein"
+
+issuesSearch = searchEngineF "lumi-issues" $ \q -> "https://gitlab.com/lumi-tech/lumi/-/issues/" <> q
 
 mySearchMap :: (SearchEngine -> a) -> M.Map (KeyMask, KeySym) a
 mySearchMap method = M.fromList $
@@ -249,8 +252,6 @@ mySearchMap method = M.fromList $
   , ((0, xK_h), method hoogle)
   , ((0, xK_i), method issuesSearch)
   ]
-
-issuesSearch = searchEngineF "lumi-issues" $ \q -> "https://gitlab.com/lumi-tech/lumi/-/issues/" <> q
 
 myXPConfig :: XPConfig
 myXPConfig = def
