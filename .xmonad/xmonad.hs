@@ -137,7 +137,6 @@ myStartupHook = do
   spawnOnce "unity-settings-daemon"
   spawnOnce "gnome-settings-daemon"
   spawnOnce "nm-applet"
-  -- spawnOnce "redshift-gtk"
   spawnOnce "pasystray"
   spawnOnce myTerminal
   -- spawnOnce "firefox"
@@ -147,10 +146,10 @@ myStartupHook = do
   -- spawnOnce "slack"
   -- spawnOnce "discord"
   -- spawnOnce "thunderbird"
-  -- spawnOnce "slack"
   -- spawnOnce "discord"
   -- spawnOnce "thunderbird"
   -- spawnOnce "spotify"
+  spawnOnce "xscreensaver -nosplash"
   if h == Desktop then desktopHooks else laptopHooks
   where
     desktopHooks = do
@@ -158,7 +157,6 @@ myStartupHook = do
       spawnOnce "nordvpn connect"
 
     laptopHooks = do
-      spawnOnce "xscreensaver -nosplash"
       spawnOnce "fdpowermon"
       spawnOnce "blueman-applet"
 
@@ -203,7 +201,7 @@ main = do
 ----------------
     `additionalKeys`
     -- screensaver
-    [ (modShift xK_z          , spawn $ myScreensaver h)
+    [ (modShift xK_z          , spawn myScreensaver)
     -- normal screenshot
     , ((0, xK_Print         ) , spawn myFullScreenShot)
     , ((modMask, xK_p)        , spawn "dmenu_run")
@@ -245,6 +243,11 @@ lumiIssues = "https://gitlab.com/lumi-tech/lumi/-/issues?scope=all&state=opened&
 
 issuesSearch = searchEngineF "lumi-issues" $ \q -> "https://gitlab.com/lumi-tech/lumi/-/issues/" <> q
 
+-- Search
+-- g - google
+-- w - wiki
+-- h - hoogle
+-- i - issues search
 mySearchMap :: (SearchEngine -> a) -> M.Map (KeyMask, KeySym) a
 mySearchMap method = M.fromList $
   [ ((0, xK_g), method google)
@@ -275,8 +278,7 @@ myModMask = mod4Mask -- mod1Maks = alt   |   mod4Mask == meta
 myTerminal = "gnome-terminal"
 myFocusedBorderColor = "#88bb77"
 myNormalBorderColor  = "#003300"
-myScreensaver Laptop = "xscreensaver-command -lock"
-myScreensaver Desktop = "gnome-screensaver-command -lock"
+myScreensaver = "xscreensaver-command -lock"
 mySelectScreenShot = "sleep 0.2; scrot -s -e 'mv $f ~/screenies'"
 myFullScreenShot = "scrot -e 'mv $f ~/screenies'"
 

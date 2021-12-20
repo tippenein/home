@@ -36,3 +36,6 @@ alias restart='sudo shutdown -r now'
 alias shutit='sudo shutdown now'
 alias e='emacs -nw'
 alias battery='upower -i /org/freedesktop/UPower/devices/battery_BAT0| grep -E "percent"'
+# both require restarts/log outs
+alias nosleep='sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target'
+alias allowsleep='sudo systemctl unmask sleep.target suspend.target hibernate.target hybrid-sleep.target'
