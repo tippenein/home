@@ -243,6 +243,7 @@ visit url route = safeSpawn mainBrowser [intercalate "/" $ catMaybes [Just url, 
 lumiIssues = "https://gitlab.com/lumi-tech/lumi/-/issues?scope=all&state=opened&assignee_username[]=tippenein"
 
 issuesSearch = searchEngineF "lumi-issues" $ \q -> "https://gitlab.com/lumi-tech/lumi/-/issues/" <> q
+libgenSearch = searchEngineF "libgen" $ \q -> "https://libgen.is/search.php?req=" <> q
 
 -- Search
 -- g - google
@@ -255,6 +256,7 @@ mySearchMap method = M.fromList $
   , ((0, xK_w), method wikipedia)                         --  "
   , ((0, xK_h), method hoogle)
   , ((0, xK_i), method issuesSearch)
+  , ((0, xK_l), method libgenSearch)
   ]
 
 myXPConfig :: XPConfig
