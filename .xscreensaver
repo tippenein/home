@@ -1,5 +1,5 @@
 # XScreenSaver Preferences File
-# Written by xscreensaver-demo 5.42 for brady on Tue Feb 23 21:52:33 2021.
+# Written by xscreensaver-demo 5.42 for tippenein on Sun Dec 19 20:57:02 2021.
 # https://www.jwz.org/xscreensaver/
 
 timeout:	0:10:00
@@ -34,8 +34,8 @@ grabVideoFrames:    False
 chooseRandomImages: False
 imageDirectory:	
 
-mode:		random
-selected:	-1
+mode:		one
+selected:	205
 
 textMode:	url
 textLiteral:	XScreenSaver
@@ -252,7 +252,8 @@ programs:								      \
 - GL: 				kaleidocycle -root			    \n\
 - GL: 				quasicrystal -root			    \n\
   GL: 				unknownpleasures -root			    \n\
-				binaryring -root			    \n\
+  Best: 			binaryring -root -growth-delay 43363	      \
+				  -ring-radius 24 -particles-number 101	    \n\
   GL: 				cityflow -root				    \n\
 - GL: 				geodesicgears -root			    \n\
 - GL: 				projectiveplane -root			    \n\

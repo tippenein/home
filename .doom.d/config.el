@@ -77,6 +77,8 @@
       "g p" #'magit-push)
 (map! :leader
       "g u" #'magit-pull)
+(map! :leader
+      "g n b" #'magit-branch-and-checkout)
 
 (defun kill-other-buffers ()
     "Kill all other buffers."

@@ -150,6 +150,7 @@ myStartupHook = do
   -- spawnOnce "thunderbird"
   -- spawnOnce "spotify"
   spawnOnce "xscreensaver -nosplash"
+  spawnOnce "screenstopper" -- ~/bin/screenstopper
   if h == Desktop then desktopHooks else laptopHooks
   where
     desktopHooks = do
@@ -201,7 +202,7 @@ main = do
 ----------------
     `additionalKeys`
     -- screensaver
-    [ (modShift xK_z          , spawn myScreensaver)
+    [ (modShift xK_z          , spawn $ myScreensaver h)
     -- normal screenshot
     , ((0, xK_Print         ) , spawn myFullScreenShot)
     , ((modMask, xK_p)        , spawn "dmenu_run")
@@ -278,7 +279,8 @@ myModMask = mod4Mask -- mod1Maks = alt   |   mod4Mask == meta
 myTerminal = "gnome-terminal"
 myFocusedBorderColor = "#88bb77"
 myNormalBorderColor  = "#003300"
-myScreensaver = "xscreensaver-command -lock"
+myScreensaver Laptop = "xscreensaver-command -lock"
+myScreensaver Desktop = "xscreensaver-command -activate"
 mySelectScreenShot = "sleep 0.2; scrot -s -e 'mv $f ~/screenies'"
 myFullScreenShot = "scrot -e 'mv $f ~/screenies'"
 
