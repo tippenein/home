@@ -40,4 +40,5 @@ if [ -e /home/brady/.nix-profile/etc/profile.d/nix.sh ]; then . /home/brady/.nix
 
 export PATH="$PATH:$HOME/snap/flutter/common/flutter/bin"
 
+export PATH="$PATH:$HOME/.ghcup/bin"
 source "$HOME/.ghcup/env"

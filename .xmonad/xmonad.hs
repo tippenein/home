@@ -23,9 +23,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageHelpers
-import XMonad.Layout.NoBorders    (noBorders, smartBorders)
-import XMonad.Layout.PerWorkspace (onWorkspace, onWorkspaces)
-import XMonad.Layout.SimpleFloat
+import XMonad.Layout.NoBorders    (smartBorders)
 import XMonad.StackSet            (focusDown, view)
 import qualified XMonad.Util.ExtensibleState           as XS
 -------------------
@@ -174,8 +172,10 @@ getHost = do
   return $ case hostName of
     "kodukbunwaree" -> Desktop
     "tippenein"     -> Laptop
+    "brady-laptop"  -> Laptop
     _               -> Desktop
 
+main :: IO ()
 main = do
   h <- getHost
   xmproc <- spawnPipe $ "/usr/bin/xmobar " <> getXmobarLocation h
@@ -205,15 +205,15 @@ main = do
     [ (modShift xK_z          , spawn $ myScreensaver h)
     -- normal screenshot
     , ((0, xK_Print         ) , spawn myFullScreenShot)
-    , ((modMask, xK_p)        , spawn "dmenu_run")
+    , ((mm, xK_p)        , spawn "dmenu_run")
     -- select screenshot
     , (modCtrl xK_Print       , spawn mySelectScreenShot)
     -- searches
-    , (modCtrl xK_g           , spawn myScreenGif)
     , (modShift xK_n          , spawn "nm-connection-editor")
     , (modCtrl  xK_Right      , nextWS)
     , (modShift xK_Right      , shiftToNext)
     , (smash xK_o             , spawn "pavucontrol")
+    , (smash xK_p             , spawn "gnome-control-center")
     , (modCtrl  xK_Left       , prevWS)
     , (modShift xK_Left       , shiftToPrev)
     , ((0, 0x1008ff12        ), spawn "amixer -q set Master mute")    --- can use 'xev' to see key events
@@ -229,10 +229,12 @@ main = do
 
   where
     smash x = (mod1Mask .|. mod4Mask .|. controlMask, x)
-    modMask = myModMask
-    modShift x = (modMask .|. shiftMask, x)
-    modCtrl x = (modMask .|. controlMask, x)
+    mm = myModMask
+    modShift x = (mm .|. shiftMask, x)
+    modCtrl x = (mm .|. controlMask, x)
+    lumiIssues = "https://gitlab.com/lumi-tech/lumi/-/issues?scope=all&state=opened&assignee_username[]=tippenein"
 
+visitGithub :: String -> X ()
 visitGithub r = visit "https://github.com/" (Just r)
 
 -- visit "somewhere.com" (Just "route")
@@ -240,9 +242,10 @@ visitGithub r = visit "https://github.com/" (Just r)
 visit :: String -> Maybe String -> X ()
 visit url route = safeSpawn mainBrowser [intercalate "/" $ catMaybes [Just url, route]] >> viewWeb
 
-lumiIssues = "https://gitlab.com/lumi-tech/lumi/-/issues?scope=all&state=opened&assignee_username[]=tippenein"
-
+issuesSearch :: SearchEngine
 issuesSearch = searchEngineF "lumi-issues" $ \q -> "https://gitlab.com/lumi-tech/lumi/-/issues/" <> q
+
+libgenSearch :: SearchEngine
 libgenSearch = searchEngineF "libgen" $ \q -> "https://libgen.is/search.php?req=" <> q
 
 -- Search
@@ -263,11 +266,12 @@ myXPConfig :: XPConfig
 myXPConfig = def
 
 
+myPromptSearch :: SearchEngine -> X ()
 myPromptSearch (SearchEngine _ site) = inputPrompt myXPConfig "Search" ?+ \s ->
   search mainBrowser site s >> viewWeb
 
-mainBrowser = "brave-browser"
 
+getXmobarLocation :: Host -> String
 getXmobarLocation h = case h of
   Desktop ->
     "~/.xmonad/xmobarDesktop.hs"
@@ -277,6 +281,7 @@ getXmobarLocation h = case h of
 ----------------
 -- constants ---
 ----------------
+mainBrowser = "brave-browser"
 myModMask = mod4Mask -- mod1Maks = alt   |   mod4Mask == meta
 myTerminal = "gnome-terminal"
 myFocusedBorderColor = "#88bb77"
@@ -285,12 +290,3 @@ myScreensaver Laptop = "xscreensaver-command -lock"
 myScreensaver Desktop = "xscreensaver-command -activate"
 mySelectScreenShot = "sleep 0.2; scrot -s -e 'mv $f ~/screenies'"
 myFullScreenShot = "scrot -e 'mv $f ~/screenies'"
-
--- ctrl-shift s to stop recordmydesktop
-myScreenGif = intercalate " && "
-  [ "mplayer -ao null ./out.ogv -vo jpeg:outdir=/tmp/output"
-  , "convert /tmp/output/* /tmp/output.gif"
-  , "gifsicle --batch --optimize=3 --scale=0.5 --colors=256 /tmp/output.gif --output ~/screenies/screen-cast-`date +%Y-%m-%d:%H:%M:%S`.gif"
-  -- "&& convert /tmp/output.gif -fuzz 10% -layers Optimize ~/screenies/screen-cast-`date +%Y-%m-%d:%H:%M:%S`.gif"
-  , "mv ~/out.ogv /tmp/screen-cast-original-`date +%Y-%m-%d:%H:%M:%S`.ogv"
-  ]
