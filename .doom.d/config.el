@@ -89,6 +89,19 @@
 (map! :leader
       "p K" #'doom/kill-other-buffers)
 
+;; purescript
+(setq psc-ide-use-npm-bin t)
+(add-hook 'purescript-mode-hook
+  (lambda ()
+    (psc-ide-mode)
+    (company-mode)
+    (flycheck-mode)
+    (turn-on-purescript-indentation)))
+
+(map! :leader
+      "m b" #'psc-ide-rebuild)
+
+
 ;; allow ripgrep usage
 (put 'projectile-ripgrep 'disabled nil)
 

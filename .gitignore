@@ -617,6 +617,7 @@ snap/
 *.local
 .miniconda*
 .ghcup/
+!.ghcup/env
 *.env
 .todo.org
 .digitalocean_oauth_token

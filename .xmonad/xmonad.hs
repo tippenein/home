@@ -150,7 +150,7 @@ myStartupHook = do
   -- spawnOnce "thunderbird"
   -- spawnOnce "spotify"
   spawnOnce "xscreensaver -nosplash"
-  spawnOnce "screenstopper" -- ~/bin/screenstopper
+  -- spawnOnce "screenstopper" -- ~/bin/screenstopper
   if h == Desktop then desktopHooks else laptopHooks
   where
     desktopHooks = do
