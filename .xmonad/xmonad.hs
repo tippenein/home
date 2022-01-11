@@ -157,7 +157,7 @@ myStartupHook = do
 
     laptopHooks = do
       spawnOnce "fdpowermon"
-      spawnOnce "blueman-applet"
+      -- spawnOnce "blueman-applet"
 
 data Host
   = Desktop

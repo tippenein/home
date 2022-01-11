@@ -80,6 +80,8 @@
 (map! :leader
       "g n b" #'magit-branch-and-checkout)
 
+(setq highlight-indent-guides-method 'bitmap)
+
 (defun kill-other-buffers ()
     "Kill all other buffers."
     (interactive)
@@ -89,6 +91,8 @@
 (map! :leader
       "p K" #'doom/kill-other-buffers)
 
+(map! :leader
+      "A" #'projectile-ripgrep)
 ;; allow ripgrep usage
 (put 'projectile-ripgrep 'disabled nil)
 
@@ -105,10 +109,10 @@
 ;; )
 ;; (add-hook 'go-mode-hook 'my-go-mode-hook)
 
+(setq psc-ide-use-npm-bin t)
+
 (setq haskell-stylish-on-save t)
 ;;
-(map! :leader
-      "A" #'projectile-ripgrep)
 
 ;; SURROUND
 (after! evil-surround

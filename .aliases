@@ -32,3 +32,5 @@ alias e='emacs -nw'
 # both require restarts/log outs
 alias nosleep='sudo systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target'
 alias allowsleep='sudo systemctl unmask sleep.target suspend.target hibernate.target hybrid-sleep.target'
+alias nightlighton='gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true'
+alias nightlightoff='gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false'
