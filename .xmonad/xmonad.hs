@@ -139,13 +139,10 @@ myStartupHook = do
   spawnOnce "nm-applet"
   spawnOnce "pasystray"
   spawnOnce myTerminal
-  -- spawnOnce "firefox"
   spawnOnce "brave-browser"
-  -- spawnOnce "google-chrome --profile-directory=Default"
+  spawnOnce "redshift-gtk"
   spawnOnce "emacs"
   -- spawnOnce "slack"
-  -- spawnOnce "discord"
-  -- spawnOnce "thunderbird"
   -- spawnOnce "discord"
   -- spawnOnce "thunderbird"
   -- spawnOnce "spotify"
@@ -155,7 +152,6 @@ myStartupHook = do
   where
     desktopHooks = do
       spawnOnce "monitors"
-      spawnOnce "nordvpn connect"
 
     laptopHooks = do
       spawnOnce "fdpowermon"
