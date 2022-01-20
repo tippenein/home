@@ -100,6 +100,8 @@
     (flycheck-mode)
     (turn-on-purescript-indentation)))
 
+(setq psc-ide-use-npm-bin t)
+
 (map! :leader
       "m b" #'psc-ide-rebuild)
 
@@ -122,7 +124,6 @@
 ;; )
 ;; (add-hook 'go-mode-hook 'my-go-mode-hook)
 
-(setq psc-ide-use-npm-bin t)
 
 (setq haskell-stylish-on-save t)
 ;;

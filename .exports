@@ -2,11 +2,17 @@ export ANDROID_HOME=~/Android/Sdk
 export PATH=${PATH}:${ANDROID_HOME}/tools
 export PATH=${PATH}:${ANDROID_HOME}/platform-tools
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="/usr/local/bin:/usr/local/mysql/bin:$PATH"
-export PATH="/usr/local/heroku/bin:$PATH"
 export PATH="$HOME/.cabal/bin:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
+export GOROOT=/usr/local/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+export PATH=$HOME/go/bin:$PATH
+export PATH="$HOME/workspace/ripgrep/target/release:$PATH"
+#  puts initdb on the path and we need it to run tests
+export PATH=$PATH:/usr/lib/postgresql/12/bin/
+export PATH="$PATH:$HOME/snap/flutter/common/flutter/bin"
+export PATH="$PATH:$HOME/.ghcup/bin"
 
 export EDITOR='vim'
 export GIT_EDITOR="vim"
@@ -15,4 +21,3 @@ export TERM='screen-256color-bce'
 export DB_BRANCH=master
 
 # export NIX_PATH=nixpkgs=$HOME/Documents/nixpkgs
-
