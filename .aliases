@@ -34,3 +34,4 @@ alias nosleep='sudo systemctl mask sleep.target suspend.target hibernate.target 
 alias allowsleep='sudo systemctl unmask sleep.target suspend.target hibernate.target hybrid-sleep.target'
 alias nightlighton='gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true'
 alias nightlightoff='gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false'
+alias reset_pulse='systemctl --user restart pulseaudio && rm -rf ~/.config/pulse && pulseaudio -k && systemctl --user restart pulseaudio'

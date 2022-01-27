@@ -1,31 +1,31 @@
 -- xmonad.hs
 
-import           XMonad
+import XMonad
 
 import Control.Monad (when)
-import Data.Maybe
 import Data.List (intercalate)
+import qualified Data.Map as M
+import Data.Maybe
 import System.IO
 import System.Posix.Unistd
-import qualified Data.Map as M
 
 import XMonad.Actions.CycleWS
-import XMonad.Actions.Submap (submap)
-import XMonad.Prompt.Input
-import XMonad.Prompt (XPConfig(..))
 import XMonad.Actions.Search
+import XMonad.Actions.Submap (submap)
 import XMonad.Config.Gnome
-import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
-import XMonad.Util.Run
-import XMonad.Util.SpawnOnce
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageHelpers
-import XMonad.Layout.NoBorders    (smartBorders)
-import XMonad.StackSet            (focusDown, view)
-import qualified XMonad.Util.ExtensibleState           as XS
+import XMonad.Hooks.SetWMName
+import XMonad.Layout.NoBorders (smartBorders)
+import XMonad.Prompt (XPConfig(..))
+import XMonad.Prompt.Input
+import XMonad.StackSet (focusDown, view)
+import XMonad.Util.EZConfig (additionalKeys, additionalKeysP)
+import qualified XMonad.Util.ExtensibleState as XS
+import XMonad.Util.Run
+import XMonad.Util.SpawnOnce
 -------------------
 -- Layouts --------
 -------------------
@@ -140,12 +140,7 @@ myStartupHook = do
   spawnOnce "brave-browser"
   spawnOnce "redshift-gtk"
   spawnOnce "emacs"
-  -- spawnOnce "slack"
-  -- spawnOnce "discord"
-  -- spawnOnce "thunderbird"
-  -- spawnOnce "spotify"
   spawnOnce "xscreensaver -nosplash"
-  -- spawnOnce "screenstopper" -- ~/bin/screenstopper
   if h == Desktop then desktopHooks else laptopHooks
   where
     desktopHooks = do
@@ -203,20 +198,19 @@ main = do
     , ((0, xK_Print         ) , spawn myFullScreenShot)
     , ((mm, xK_p)        , spawn "dmenu_run")
     -- select screenshot
-    , (modCtrl xK_Print       , spawn mySelectScreenShot)
-    -- searches
-    , (modShift xK_n          , spawn "nm-connection-editor")
-    , (modCtrl  xK_Right      , nextWS)
-    , (modShift xK_Right      , shiftToNext)
-    , (smash xK_o             , spawn "pavucontrol")
-    , (smash xK_p             , spawn "gnome-control-center")
-    , (modCtrl  xK_Left       , prevWS)
-    , (modShift xK_Left       , shiftToPrev)
-    , ((0, 0x1008ff12        ), spawn "amixer -q set Master mute")    --- can use 'xev' to see key events
-    , ((0, 0x1008ff11        ), spawn "amixer -q sset Master 2%- unmute")
-    , ((0, 0x1008ff13        ), spawn "amixer -q sset Master 2%+ unmute")
-    , ((0, 0x1008ff03        ), spawn "xbacklight -inc -10%")
-    , ((0, 0x1008ff02        ), spawn "xbacklight -inc +10%")
+    , (modCtrl xK_Print, spawn mySelectScreenShot)
+    , (modCtrl  xK_Right, nextWS)
+    , (modShift xK_Right, shiftToNext)
+    , (smash xK_o, safeSpawnProg "pavucontrol")
+    , (smash xK_p, safeSpawnProg "gnome-control-center")
+    , (modCtrl  xK_Left, prevWS)
+    , (modShift xK_Left, shiftToPrev)
+    , ((0, 0x1008ff12), spawn "amixer -q set Master mute")    --- can use 'xev' to see key events
+    , ((0, 0x1008ff11), spawn "amixer -q sset Master 2%- unmute")
+    , ((0, 0x1008ff13), spawn "amixer -q sset Master 2%+ unmute")
+    , ((0, 0x1008ff03), spawn "xbacklight -inc -10%")
+    , ((0, 0x1008ff02), spawn "xbacklight -inc +10%")
+    , (modShift xK_t, teatimer)
     ] `additionalKeysP`
     [ ("M-/", submap . mySearchMap $ myPromptSearch)
     , ("M-g h", visitGithub "tippenein/home")
@@ -261,11 +255,13 @@ mySearchMap method = M.fromList $
 myXPConfig :: XPConfig
 myXPConfig = def
 
+teatimer :: X ()
+teatimer = inputPrompt myXPConfig "Time" ?+ \s ->
+  asks (terminal . config) >>= \t -> safeSpawn t ["'/usr/local/bin/sh' -- tt " <> s]
 
 myPromptSearch :: SearchEngine -> X ()
 myPromptSearch (SearchEngine _ site) = inputPrompt myXPConfig "Search" ?+ \s ->
   search mainBrowser site s >> viewWeb
-
 
 getXmobarLocation :: Host -> String
 getXmobarLocation h = case h of
