@@ -3,6 +3,9 @@
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
+;; XXX  currently evil toggle is disabled but you can reset the keystroke by doing
+;; customize-variable
+;; evil-toggle-key
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
@@ -38,6 +41,12 @@
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
+
+;; disable auto save
+(setq auto-save-default nil)
+
+(setq lsp-enable-file-watchers nil)
+(setq lsp-file-watch-threshold 50)
 
 ;; emacs
 (map! :leader
@@ -105,8 +114,10 @@
 (map! :leader
       "m b" #'psc-ide-rebuild)
 
+;; (map! "C-z b" #'switch-to-buffer)
+
 ;; allow ripgrep usage
-(put 'projectile-ripgrep 'disabled nil)
+;; (put 'projectile-ripgrep 'disabled nil)
 (map! :leader
       "A" #'projectile-ripgrep)
 
@@ -123,7 +134,6 @@
 ;;   ; Godef jump key binding
 ;; )
 ;; (add-hook 'go-mode-hook 'my-go-mode-hook)
-
 
 (setq haskell-stylish-on-save t)
 ;;

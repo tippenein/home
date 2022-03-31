@@ -199,6 +199,7 @@ main = do
     , ((mm, xK_p)        , spawn "dmenu_run")
     -- select screenshot
     , (modCtrl xK_Print, spawn mySelectScreenShot)
+    , (smash xK_Print, spawn mySelectScreenShotDelayed)
     , (modCtrl  xK_Right, nextWS)
     , (modShift xK_Right, shiftToNext)
     , (smash xK_o, safeSpawnProg "pavucontrol")
@@ -280,5 +281,6 @@ myFocusedBorderColor = "#88bb77"
 myNormalBorderColor  = "#003300"
 myScreensaver Laptop = "xscreensaver-command -lock"
 myScreensaver Desktop = "xscreensaver-command -activate"
-mySelectScreenShot = "sleep 0.2; scrot -s -e 'mv $f ~/screenies'"
+mySelectScreenShot = "sleep 0.2; scrot --select -e 'mv $f ~/screenies'"
+mySelectScreenShotDelayed = "sleep 0.2; scrot --select --delay 3 -e 'mv $f ~/screenies'"
 myFullScreenShot = "scrot -e 'mv $f ~/screenies'"
