@@ -1,7 +1,7 @@
 alias g='git'
 alias ag='rg'
 alias j='z'
-alias logout='sudo pkill -u tippenein'
+alias logout='sudo pkill -u $USER'
 alias apti='sudo apt install'
 alias aptrm='sudo apt purge'
 alias aptup='sudo apt update'
