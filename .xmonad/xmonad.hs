@@ -77,6 +77,7 @@ myManageHook = (composeAll . concat $
       myGames   = ["Slay the Spire"]
       myFloats  = [ "Discord"
                   , "Slack Call Minipanel"
+                  , "Zeal"
                   , "keepass2"
                   , "keepassx"
                   , "feh"
@@ -98,30 +99,9 @@ myManageHook = (composeAll . concat $
       -- a trick for fullscreen but stil allow focusing of other WSs
       myDoFullFloat :: ManageHook
       myDoFullFloat = doF focusDown <+> doFullFloat
-      -- Lockdown mode (for Getting Work Done)
-
-data LockdownState = LockdownState Bool
-  deriving (Typeable, Read, Show)
-
-instance ExtensionClass LockdownState where
-  initialValue  = LockdownState False
-  extensionType = PersistentExtension
-
-setLockdown :: X ()
-setLockdown = XS.put (LockdownState True)
-
-releaseLockdown :: X ()
-releaseLockdown = XS.put (LockdownState False)
-
-toggleLockdown :: X ()
-toggleLockdown = XS.modify (\(LockdownState l) -> LockdownState (not l))
-
-withLockdown act = do
-  LockdownState l <- XS.get
-  when (not l) act
 
 viewWeb :: X ()
-viewWeb = withLockdown $ windows (view "web")
+viewWeb = windows (view "web")
 
 newManageHook = myManageHook <+> manageHook def
 
@@ -216,6 +196,7 @@ main = do
     [ ("M-/", submap . mySearchMap $ myPromptSearch)
     , ("M-g h", visitGithub "tippenein/home")
     , ("M-g l", visit lumiIssues Nothing)
+    , ("M-z z", zeal)
     ]
 
   where
@@ -255,6 +236,11 @@ mySearchMap method = M.fromList $
 
 myXPConfig :: XPConfig
 myXPConfig = def
+
+
+zeal :: X ()
+zeal = inputPrompt myXPConfig "Zeal" ?+ \s ->
+  safeSpawn "zeal" [s]
 
 teatimer :: X ()
 teatimer = inputPrompt myXPConfig "Time" ?+ \s ->
