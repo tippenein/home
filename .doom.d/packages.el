@@ -14,6 +14,9 @@
 ;; https://github.com/raxod502/straight.el#the-recipe-format
 ;(package! another-package
 ;  :recipe (:host github :repo "username/repo"))
+(package! unison-mode
+  :recipe (:host github :repo "dariooddenino/unison-mode-emacs"
+           :files ("unisonlang-mode.el" "src/lisp/*.el")))
 
 ;; If the package you are trying to install does not contain a PACKAGENAME.el
 ;; file, or is located in a subdirectory of the repo, you'll need to specify

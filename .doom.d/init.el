@@ -133,7 +133,7 @@
        nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        org               ; organize your plain life in plain text
-       purescript        ; javascript, but functional
+       (purescript +tidy)        ; javascript, but functional
        python            ; beautiful is better than ugly
        racket            ; a DSL for DSLs
        ;;rest              ; Emacs as a REST client

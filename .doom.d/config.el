@@ -45,7 +45,7 @@
 ;; disable auto save
 (setq auto-save-default nil)
 
-(setq lsp-enable-file-watchers nil)
+(setq lsp-enable-file-watchers t)
 (setq lsp-file-watch-threshold 50)
 
 ;; emacs
@@ -121,6 +121,9 @@
 (map! :leader
       "A" #'projectile-ripgrep)
 
+;; use lsp lookup instead
+(add-hook! lsp-mode
+  (defalias '+lookup/references 'lsp-find-references))
 
 ;; fuck go
 ;; go mode

@@ -237,7 +237,6 @@ mySearchMap method = M.fromList $
 myXPConfig :: XPConfig
 myXPConfig = def
 
-
 zeal :: X ()
 zeal = inputPrompt myXPConfig "Zeal" ?+ \s ->
   safeSpawn "zeal" [s]
@@ -263,7 +262,7 @@ getXmobarLocation h = case h of
 mainBrowser = "brave-browser"
 myModMask = mod4Mask -- mod1Maks = alt   |   mod4Mask == meta
 myTerminal = "gnome-terminal"
-myFocusedBorderColor = "#88bb77"
+myFocusedBorderColor = "#9c03c8"
 myNormalBorderColor  = "#003300"
 myScreensaver Laptop = "xscreensaver-command -lock"
 myScreensaver Desktop = "xscreensaver-command -activate"
