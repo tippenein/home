@@ -16,7 +16,9 @@ Dropbox
 .bash_logout
 .bashrc
 .cache/
-.config/
+.config/*
+!.config/xmonad/
+!.config/xmonad/*
 .dbus/
 .dmrc
 .dropbox-dist/
@@ -638,3 +640,4 @@ thinkorswim
 .xmonad/prompt-history
 .ipfs
 binpriv/
+.wdm/

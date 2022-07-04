@@ -103,13 +103,12 @@ myManageHook = (composeAll . concat $
 viewWeb :: X ()
 viewWeb = windows (view "web")
 
-newManageHook = myManageHook <+> manageHook def
+
 
 myStartupHook :: X ()
 myStartupHook = do
   h <- liftIO getHost
-  ewmhDesktopsStartup >> setWMName "LG3D"  --- make java applications work..
-  spawnOnce myTrayer
+  -- spawnOnce myTrayer
   spawnOnce "setxkbmap -option caps:swapescape"
   spawnOnce "feh --bg-scale ~/Desktop/background.jpg"
   spawnOnce "unity-settings-daemon"
@@ -150,9 +149,9 @@ main :: IO ()
 main = do
   h <- getHost
   xmproc <- spawnPipe $ "/usr/bin/xmobar " <> getXmobarLocation h
-  xmonad $ gnomeConfig
+  xmonad $ gnomeConfig -- docks (ewmh def)
     { borderWidth        = 2
-    , manageHook         = newManageHook
+    , manageHook         = myManageHook <+> manageHook def
     , modMask            = myModMask
     , workspaces         = myWorkspaces
     , layoutHook         = smartBorders $ myLayout
@@ -160,7 +159,7 @@ main = do
     , focusedBorderColor = myFocusedBorderColor
     , terminal           = myTerminal
     , startupHook        = myStartupHook
-    , handleEventHook    = fullscreenEventHook <+> docksEventHook
+    -- , handleEventHook = docks $ ewmf def
     , focusFollowsMouse  = True
     , logHook = dynamicLogWithPP xmobarPP
               { ppOutput = hPutStrLn xmproc
@@ -252,9 +251,9 @@ myPromptSearch (SearchEngine _ site) = inputPrompt myXPConfig "Search" ?+ \s ->
 getXmobarLocation :: Host -> String
 getXmobarLocation h = case h of
   Desktop ->
-    "~/.xmonad/xmobarDesktop.hs"
+    "~/.config/xmonad/xmobarDesktop.hs"
   Laptop ->
-    "~/.xmonad/xmobarLaptop.hs"
+    "~/.config/xmonad/xmobarLaptop.hs"
 
 ----------------
 -- constants ---
@@ -269,4 +268,4 @@ myScreensaver Desktop = "xscreensaver-command -activate"
 mySelectScreenShot = "sleep 0.2; scrot --select -e 'mv $f ~/screenies'"
 mySelectScreenShotDelayed = "sleep 0.2; scrot --select --delay 3 -e 'mv $f ~/screenies'"
 myFullScreenShot = "scrot -e 'mv $f ~/screenies'"
-myTrayer = "trayer --transparent true --edge top --align right --monitor primary --width 12 --iconspacing 2 --tint 0x000000 --height 23"
+-- myTrayer = "trayer --transparent true --edge top --align right --monitor primary --width 12 --iconspacing 2 --tint 0x000000 --height 23"

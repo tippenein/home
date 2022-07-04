@@ -6,7 +6,7 @@ Config { font = "xft:Bitstream Vera Sans Mono:size=12:antialias=true"
                     , Run Memory ["-t", "<usedratio>%"] 30
                     , Run Date "%a %b %_d - %l:%M" "date" 30
                     , Run StdinReader
-                    , Run Com "/bin/bash" ["-c", "~/.xmonad/get-volume"] "myvolume" 1
+                    , Run Com "/bin/bash" ["-c", "~/.config/xmonad/get-volume"] "myvolume" 1
                     ]
        , sepChar = "%"
        , alignSep = "}{"
