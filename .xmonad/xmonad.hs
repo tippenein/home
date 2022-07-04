@@ -93,7 +93,7 @@ myManageHook = (composeAll . concat $
                   ]
 
       -- resources
-      myIgnores = ["desktop","desktop_window","stalone-tray","notify-osd","stalonetray","trayer"]
+      myIgnores = ["desktop","desktop_window","notify-osd","trayer"]
       myNames   = ["bashrun","Google Chrome Options","Chromium Options"]
 
       -- a trick for fullscreen but stil allow focusing of other WSs
@@ -109,7 +109,7 @@ myStartupHook :: X ()
 myStartupHook = do
   h <- liftIO getHost
   ewmhDesktopsStartup >> setWMName "LG3D"  --- make java applications work..
-  spawnOnce "stalonetray --dockapp-mode simple"
+  spawnOnce myTrayer
   spawnOnce "setxkbmap -option caps:swapescape"
   spawnOnce "feh --bg-scale ~/Desktop/background.jpg"
   spawnOnce "unity-settings-daemon"
@@ -269,3 +269,4 @@ myScreensaver Desktop = "xscreensaver-command -activate"
 mySelectScreenShot = "sleep 0.2; scrot --select -e 'mv $f ~/screenies'"
 mySelectScreenShotDelayed = "sleep 0.2; scrot --select --delay 3 -e 'mv $f ~/screenies'"
 myFullScreenShot = "scrot -e 'mv $f ~/screenies'"
+myTrayer = "trayer --transparent true --edge top --align right --monitor primary --width 12 --iconspacing 2 --tint 0x000000 --height 23"
