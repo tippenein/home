@@ -70,6 +70,10 @@
 (map! :leader
       "r v" #'rustic-cargo-run)
 
+;; rust-analyzer or rls
+(after! rustic
+  (setq rustic-lsp-server 'rls))
+
 ;; macros
 ;; These are probably useless just gotta remember how the 'q' and '@' work for macros in evil
 (map! :leader

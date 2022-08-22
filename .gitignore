@@ -19,6 +19,7 @@ Dropbox
 .config/*
 !.config/xmonad/
 !.config/xmonad/*
+!.config/i3/config
 .dbus/
 .dmrc
 .dropbox-dist/
