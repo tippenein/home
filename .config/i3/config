@@ -38,19 +38,25 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
 # back and forth
+bindsym $mod+Tab focus up
 bindsym $mod+Shift+Tab workspace back_and_forth
 bindsym $mod+bracketright workspace next
 bindsym $mod+bracketleft workspace prev
 
 # screenshot
-bindsym --release Print exec gnome-screenshot
-bindsym --release $mod+Print exec gnome-screenshot -a
+
+bindsym --release Print exec scrot -e 'mv $f ~/screenies'
+bindsym --release $mod+Print exec "sleep 0.2; scrot --select -e 'mv $f ~/screenies'"
+bindsym --release ctrl+Shift+Print exec "scrot --select --delay 3 -e 'mv $f ~/screenies'"
 
 # suspend and lock?
 # bindsym $ctrl+$mod+l exec lockscreen
 # bindsym XF86ScreenSaver exec lockscreen
-bindsym $mod+Shift+z exec lockscreen && systemctl suspend
+# bindsym --release $mod+z exec gnome-screensaver -l && systemctl suspend
 # bindsym XF86PowerOff exec lockscreen && systemctl suspend
+bindsym $mod+Shift+s exec i3lock -c Black
+bindsym $mod+z exec --no-startup-id systemctl suspend
+
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -173,6 +179,32 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+# center titles for once
+title_align center
+
+# solarized
+set $base03 #002b36
+set $base02 #073642
+set $base01 #586e75
+set $base00 #657b83
+set $base0 #839496
+set $base1 #93a1a1
+set $base2 #eee8d5
+set $base3 #fdf6e3
+set $yellow #b58900
+set $orange #cb4b16
+set $red #dc322f
+set $magenta #d33682
+set $violet #6c71c4
+set $blue #268bd2
+set $cyan #2aa198
+set $green #859900
+
+client.focused          $base02 $base02 $base2
+client.unfocused        $base00 $base00 $base1
+client.focused_inactive $base01 $base01 $base1
+client.urgent           $red    $red    $base03
+
 # resize window (you can also use the mouse for that)
 mode "resize" {
         # These bindings trigger as soon as you enter the resize mode
@@ -209,3 +241,4 @@ bar {
 	font pango:DejaVu Sans Mono 12
 	separator_symbol ⁞
 }
+
